@@ -97,27 +97,33 @@ export default {
         accessToken: process.env.CTF_CD_ACCESS_TOKEN
       });
 
+      let routes = [];
+
+      // top-level nav items
       client.getEntries({
         content_type: 'navItem'
       }).then((response) => {
-        return response.items.map(entry => {
+        routes.concat(response.items.map(entry => {
           return {
             route: entry.fields.slug,
             payload: entry
           };
-        });
+        }));
       });
 
-      return client.getEntries({
+      // posts
+      client.getEntries({
         content_type: 'blogPost'
       }).then((response) => {
-        return response.items.map(entry => {
+        routes.concat(response.items.map(entry => {
           return {
             route: entry.fields.slug,
             payload: entry
           };
-        });
+        }));
       });
+
+      return routes;
     }
   }
 }
