@@ -88,13 +88,24 @@ export default {
   },
 
   /**
-   * STatically generate the site (so contentful isn't loading from client)
+   * Statically generate the site (so contentful isn't loading from client)
    */
   generate: {
     routes: () => {
       const client = contentful.createClient({
         space:  process.env.CTF_SPACE_ID,
         accessToken: process.env.CTF_CD_ACCESS_TOKEN
+      });
+
+      client.getEntries({
+        content_type: 'navItem'
+      }).then((response) => {
+        return response.items.map(entry => {
+          return {
+            route: entry.fields.slug,
+            payload: entry
+          };
+        });
       });
 
       return client.getEntries({

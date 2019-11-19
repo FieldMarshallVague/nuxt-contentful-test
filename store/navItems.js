@@ -13,7 +13,8 @@ export const mutations = {
 export const actions = {
   async getNavItems({commit}) {
     const response = await client.getEntries({
-      content_type: 'navItem'
+      content_type: 'navItem',
+      order: 'fields.order'
     });
     if (response.items.length > 0) {
       commit('setNavItems', response.items);
